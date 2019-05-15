@@ -3,8 +3,7 @@
 <suite name="Suite" data-provider-thread-count="5">
 	<test name="Test">
 	    <classes>
-	        <class name="com.gurukula.testgurukula.TestLoginPage"/>
-	        <class name="com.gurukula.testgurukula.TestForgotPasswordPage"/>
+	        <class name="com.gurukula.testgurukula.*"/>
 	    </classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->
