@@ -10,7 +10,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
  * Responsible: Chandra.Sekhar.Muttineni
  * @author https://github.com/cham6
  * @email: paperplanes.chandra@gmail.com
- * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ * @fork: https://github.com/cham6/gurukulaAssignment
  */
 
 import com.gurukula.testgurukula.interfaces.ITestBase;
