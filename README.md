@@ -7,7 +7,7 @@
 2) Test Plan and Strategy documents. 'TestArtefacts'
 3) Bug reports. 'TestArtefacts'
 4) Automation framework. 'gurukula'
-5) ReadMe with details like </b> 'TestArtefacts'
+5) ReadMe PDF under 'TestArtefacts' with details like </b> 
    <p> a) The Automation approach followed, and tactics used.</p>
     <p>b) Technologies / Frameworks used.</p>
    <p> c) What are not tested.</p>
