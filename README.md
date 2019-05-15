@@ -11,3 +11,4 @@
    <p> a) The Automation approach followed, and tactics used.</p>
     <p>b) Technologies / Frameworks used.</p>
    <p> c) What are not tested.</p>
+   <p> d) How to invoke the tests. </p>
