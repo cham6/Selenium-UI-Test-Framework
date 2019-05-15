@@ -1,0 +1,223 @@
+package com.gurukula.testgurukula.pages;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import com.gurukula.testgurukula.util.WebDriverWrapperUtil;
+
+public class BranchPage {
+
+	WebDriver driver;
+	
+	@FindBy(xpath="//h2[text()='Branches']")
+	WebElement branchesLabel;
+	
+	@FindBy(xpath="//span[text()='Create a new Branch']")
+	WebElement createNewBranchButton;
+	
+	@FindBy(id="searchQuery")
+	WebElement searchText;
+	
+	@FindBy(xpath="//span[text()='Search a Branch']")
+	WebElement searchButton;
+	
+	@FindBy(xpath="//*[@class='table table-striped']")
+	WebElement branchWebTable;
+	
+	@FindBy(id="myBranchLabel")
+	WebElement createOrEditBranchLabel;
+	
+	@FindBy(xpath="//input[@name='id']")
+	WebElement readonlyIDTextBox;
+	
+	@FindBy(xpath="//input[@name='name']")
+	WebElement branchNameTextbox;
+	
+	@FindBy(xpath="//input[@name='code']")
+	WebElement branchCodeTextBox;
+	
+	@FindBy(xpath="//span[text()='Cancel']")
+	WebElement cancelButton;
+	
+	@FindBy(xpath="//span[text()='Save']")
+	WebElement saveButton;
+	
+	@FindBy(xpath="//span[text()='Back']")
+	WebElement backButton;
+	
+	@FindBy(xpath="//span[text()='Confirm delete operation']")
+	WebElement confirmDeleteLabel;
+	
+	@FindBy(xpath="//span[text()='Delete']")
+	WebElement deleteButton;
+	
+
+	
+	public BranchPage(WebDriver wd) {
+		driver = wd;
+		PageFactory.initElements(driver, this);
+	}
+	
+	private void clickCreateNewBranch() {
+		createNewBranchButton.click();
+	}
+	
+	private boolean isCreateOrEditBranchLabelPresent() {
+		return createOrEditBranchLabel.isDisplayed();
+	}
+	
+	private void setBranchName(String branchName) {
+		branchNameTextbox.sendKeys(branchName);
+	}
+	
+	private void setBranchCode(String code) {
+		branchCodeTextBox.sendKeys(code);
+	}
+	
+	private void saveBranch() {
+		saveButton.click();
+	}
+	
+	private void cancelNewBranchWizard() {
+		cancelButton.click();
+	}
+	
+	private void clickOnBackButton() {
+		backButton.click();
+	}
+	
+	public boolean isSaveEnabled() {
+		
+		try {
+			return saveButton.isEnabled();
+		} catch(NoSuchElementException nse) {
+			System.out.println("'Save button is not enabled");
+			nse.printStackTrace();
+			return false;
+		}
+	}
+	
+	public void searchForBranch(String queryText) {
+		searchText.sendKeys(queryText);
+		searchButton.click();
+	}
+
+	/**
+	 * This method will be exposed to Tests
+	 * @param userName
+	 * @param password
+	 * @throws InterruptedException 
+	 */
+	public void createNewBranch(String 	branchName, String branchCode){
+		
+		clickCreateNewBranch();
+		setBranchName(branchName);
+		setBranchCode(branchCode);
+		
+		saveBranch();
+		
+	}
+	
+	public boolean isBranchCreatedSuccessfully(String branchName, String branchCode){
+		try {
+			if(WebDriverWrapperUtil.getWebTableCellElement(driver, branchWebTable, branchName) == null) {
+				return false;
+			}
+			
+			if(WebDriverWrapperUtil.getWebTableCellElement(driver, branchWebTable, branchCode) == null) {
+				return false;
+			}
+			return true;
+		}
+		catch(NoSuchElementException nse) {
+			System.out.println("'Element not found during table check.");
+			return false;
+		}
+	}
+	
+	public boolean isViewBranchSuccessful(String branchName, String branchCode){
+		Map<String, String> customMap = new HashMap<String, String>();
+		customMap.put("Name", branchName);
+		customMap.put("Code", branchCode);
+		customMap.put("Action", "View");
+		try {
+			WebElement viewElement = 
+					WebDriverWrapperUtil.getBranchStaffTableActionElement(driver, branchWebTable, customMap);
+				
+			if(viewElement == null) {
+				System.out.println("View action is not available for the given branch "+ branchName);
+				return false;
+			}
+			viewElement.click();
+			
+			if(driver.findElement(By.xpath("//input[@value='"+branchName+"']")) == null) {
+				return false;
+			}
+			
+			if(driver.findElement(By.xpath("//input[@value='"+branchCode+"']")) == null) {
+				return false;
+			}
+			
+			clickOnBackButton();
+			return true;
+			
+		}
+		catch(NoSuchElementException nse) {
+			System.out.println("Element not found during table check.");
+			return false;
+		}
+		catch(Exception e) {
+			System.out.println("Exception while viewing the branch Name and Code");
+			return false;
+		}
+	}
+	
+	public boolean isEditSuccessful(String branchName, String branchCode, 
+						String newBranchName, String newBranchCode) {
+		
+		Map<String, String> customMap = new HashMap<String, String>();
+		customMap.put("Name", branchName);
+		customMap.put("Code", branchCode);
+		customMap.put("Action", "View");
+		try {
+			WebElement viewElement = 
+					WebDriverWrapperUtil.getBranchStaffTableActionElement(driver, branchWebTable, customMap);
+				
+			if(viewElement == null) {
+				System.out.println("View action is not available for the given branch "+ branchName);
+				return false;
+			}
+			viewElement.click();
+			
+			if(driver.findElement(By.xpath("//input[@value='"+branchName+"']")) == null) {
+				return false;
+			}
+			
+			if(driver.findElement(By.xpath("//input[@value='"+branchCode+"']")) == null) {
+				return false;
+			}
+			
+			clickOnBackButton();
+			return true;
+			
+		}
+		catch(NoSuchElementException nse) {
+			System.out.println("Element not found during table check.");
+			return false;
+		}
+		catch(Exception e) {
+			System.out.println("Exception while viewing the branch Name and Code");
+			return false;
+		}
+	}
+	
+	
+	
+}

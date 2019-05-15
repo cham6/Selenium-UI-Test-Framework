@@ -1,0 +1,45 @@
+package com.gurukula.testgurukula.implementations;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import com.gurukula.testgurukula.interfaces.ITestBase;
+import com.gurukula.testgurukula.testData.TestConstants;
+
+/**
+ * Implementation of ITestBase test contract. 
+ * This class stands as the base class for all test classes. 
+ * @author Chandra.Sekhar.Muttineni
+ *
+ */
+public class TestBaseImpl implements ITestBase {
+	
+	WebDriver driver;
+	protected String loginUri = TestConstants.LOGIN_URL;
+	protected String validPassword = TestConstants.VALID_PASSWORD;
+	protected String validUsername = TestConstants.VALID_USERNAME;
+	protected String forgotPasswordUri = TestConstants.FORGOT_PASSWORD_URL;
+	protected String registrationUri = TestConstants.REGISTRATION_URL;
+	
+	public void setUp() {
+		System.out.println("Create a WebDriver Instance for test");
+    	System.setProperty("webdriver.gecko.driver", "src/test/resources/geckodriver");
+    	driver = new FirefoxDriver();
+        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+    	
+    }
+    
+	public void tearDown() {
+    	System.out.println("Dispose the WebDriver after each test run");
+    }
+}

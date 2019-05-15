@@ -1,0 +1,99 @@
+package com.gurukula.testgurukula.pages;
+
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class LoggedInPage extends BasePage {
+	
+//WebDriver driver;
+	
+	@FindBy(xpath="//span[text()='Entities']")
+	WebElement entities;
+	
+	@FindBy(xpath="//span[text()='Branch']")
+	WebElement branch;
+	
+	@FindBy(xpath="//span[text()='Staff']")
+	WebElement staff;
+	
+	@FindBy(xpath="//span[text()='Account']")
+	WebElement account;
+	
+	@FindBy(xpath="//span[text()='Settings']")
+	WebElement settings;
+	
+	@FindBy(xpath="//span[text()='Sessions']")
+	WebElement sessions;
+	
+	@FindBy(xpath="//span[text()='Log out']")
+	WebElement logout;
+	
+	@FindBy(xpath="//span[text()='Home']")
+	WebElement home;
+	
+	@FindBy(xpath="//span[text()='Password']")
+	WebElement password;
+
+	public LoggedInPage(WebDriver wd) {
+		super(wd);
+		PageFactory.initElements(driver, this);
+	}
+	
+	public boolean isLoggedIn() {
+		try {
+			return entities.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("'The user is not logged in.");
+			nse.printStackTrace();
+			return false;
+		}
+	}
+	
+	public void clickEntities() {
+		waitForElementToAppear(entities);
+		entities.click();
+	}
+	
+	public void clickBranch() {
+		waitForElementToAppear(branch);
+		branch.click();
+	}
+	
+	public void clickStaff() {
+		waitForElementToAppear(staff);
+		staff.click();
+	}
+	
+	public void clickAccount() {
+		waitForElementToAppear(account);
+		account.click();
+	}
+	
+	public void clickSettings() {
+		waitForElementToAppear(settings);
+		settings.click();
+	}
+	
+	public void clickSessions() {
+		waitForElementToAppear(sessions);
+		sessions.click();
+	}
+	
+	public void clickHome() {
+		waitForElementToAppear(home);
+		home.click();
+	}
+	
+	public void clickLogout() {
+		waitForElementToAppear(logout);
+		logout.click();
+	}
+	
+	public void clickPassword() {
+		waitForElementToAppear(password);
+		password.click();
+	}
+}

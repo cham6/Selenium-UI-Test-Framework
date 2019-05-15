@@ -1,0 +1,51 @@
+package com.gurukula.testgurukula.tests;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.gurukula.testgurukula.implementations.TestBaseImpl;
+import com.gurukula.testgurukula.pages.LoginPage;
+import com.gurukula.testgurukula.testData.DataProviders;
+
+public class TestRegistrationPage extends TestBaseImpl{
+
+	LoginPage loginPage;
+	WebDriver driver;
+	
+    @BeforeMethod
+    public void setUp() {
+    	super.setUp();
+    	driver = new FirefoxDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.get(loginUri);
+    }
+
+    @Test(dataProviderClass = DataProviders.class, dataProvider="ValidLoginDataProvider")
+    public void testSuccessfulRegistration(String username, String password) {
+    	loginPage = new LoginPage(driver);
+    	loginPage.loginToGurukula(username, password);
+    	Assert.assertTrue(loginPage.isLoginSuccessful());
+    }
+    
+    @Test(dataProviderClass = DataProviders.class, dataProvider="InvalidLoginDataProvider")
+    public void testFailedRegistration(String username, String password) {
+    	loginPage = new LoginPage(driver);
+    	loginPage.loginToGurukula(username, password);
+    	Assert.assertTrue(loginPage.hasLoginFailed());
+    }
+ 
+    @AfterMethod
+    public void tearDown() {
+    	super.tearDown();
+    	System.out.println("Dispose the WebDriver after each test run");
+    	driver.quit();
+    	
+    }
+	
+}

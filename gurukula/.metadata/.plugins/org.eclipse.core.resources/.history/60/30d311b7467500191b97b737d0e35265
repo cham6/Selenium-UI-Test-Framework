@@ -1,0 +1,19 @@
+package com.gurukula.testgurukula.util;
+
+import java.io.File;
+
+public class Runtests {
+
+	public static void main(String[] args) {
+		String filename = 
+				"src" + File.separator 
+				+ "test" + File.separator  
+				+ "java"  + File.separator 
+				+ "com"  + File.separator 
+				+ "gurukula"  + File.separator  
+				+ "testgurukula"  + File.separator 
+				+ "testData" + File.separator + "ValidLoginTestData.xls";
+		TestDataHandler.readTwoCellTestData(filename);
+	}
+	
+}

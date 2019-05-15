@@ -1,0 +1,30 @@
+package com.gurukula.testgurukula.testData;
+
+import java.io.File;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.testng.annotations.DataProvider;
+
+import com.gurukula.testgurukula.util.TestDataHandler;
+
+public class DataProviders {
+	
+	String testDataFolder = TestConstants.TESTDATA_FOLDER;
+	String invalidLoginFileName = testDataFolder + File.separator + "FailureLoginTestData.xls";
+	String validLoginFileName = testDataFolder + File.separator + "ValidLoginTestData.xls";
+	String validEmailFileName = testDataFolder + File.separator + "ValidEmailTestData.xls";
+	String invalidEmailFileName = testDataFolder + File.separator + "FailureEmailTestData.xls";
+
+	@DataProvider(name="InvalidLoginDataProvider")
+    public Object[][] getNullEmptyLongDataProvider() {
+    	
+    	return TestDataHandler.readTwoDimensionalData(invalidLoginFileName);
+    } 
+    
+    @DataProvider(name="ValidLoginDataProvider")
+    public Object[][] getValidLoginDataProvider() {
+    	
+    	return TestDataHandler.readTwoDimensionalData(validLoginFileName);
+    } 
+    
+}

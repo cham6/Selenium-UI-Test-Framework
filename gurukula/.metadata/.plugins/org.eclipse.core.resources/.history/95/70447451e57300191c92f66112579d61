@@ -1,0 +1,115 @@
+package com.gurukula.testgurukula.tests;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.gurukula.testgurukula.implementations.TestBaseImpl;
+import com.gurukula.testgurukula.pages.BranchPage;
+import com.gurukula.testgurukula.pages.LoggedInPage;
+import com.gurukula.testgurukula.pages.LoginPage;
+
+public class TestBranchPage extends TestBaseImpl{
+
+	BranchPage branchPage;
+	LoginPage loginPage;
+	LoggedInPage loggedInPage;
+	WebDriver driver;
+	
+    @BeforeMethod
+    public void setUp() {
+    	super.setUp();
+    	driver = new FirefoxDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.get(loginUri);
+    }
+/*
+    @Test
+    public void testNewBranchCreation() {
+    	try {
+    		loginAndNavigateToBranchesPage();
+	    	branchPage = new BranchPage(driver);
+	    	branchPage.createNewBranch("CHAMBRANCH", "CHAMCODE");
+	    	Assert.assertTrue(branchPage.isBranchCreatedSuccessfully("CHAMBRANCH", "CHAMCODE"));	    	
+    	} catch(Exception nse) {
+			System.out.println("'Save button is not enabled");
+			nse.printStackTrace();
+		}
+    }
+  */ 
+    
+    /* 
+    @Test
+    public void testViewActionOnNewBranch() {
+    	try {
+    		loginAndNavigateToBranchesPage();
+	    	branchPage = new BranchPage(driver);
+	    	branchPage.createNewBranch("CHAMBRANCHNEW", "CHAMCODE");
+	    	Assert.assertTrue(branchPage.isViewBranchSuccessful("CHAMBRANCHNEW", "CHAMCODE"));
+    	} catch(Exception nse) {
+			System.out.println("'Save button is not enabled");
+			nse.printStackTrace();
+		}
+    }
+  
+    @Test
+    public void testEditActionOnNewBranch() {
+    	try {
+    		loginAndNavigateToBranchesPage();
+	    	branchPage = new BranchPage(driver);
+	    	branchPage.createNewBranch("HAMBRANCHNEWC", "HAMCODE");
+	    	Assert.assertTrue(branchPage.isEditBranchSuccessful("HAMBRANCHNEW", "HAMCODE", 
+	    			"HAMBUR", "HAMBUR"));
+    	} catch(Exception nse) {
+			System.out.println("'Exception in test testEditActionOnNewBranch");
+			nse.printStackTrace();
+		}
+    }
+    */
+    @Test
+    public void testDeleteActionOnNewBranch() {
+    	try {
+    		loginAndNavigateToBranchesPage();
+	    	branchPage = new BranchPage(driver);
+	    	branchPage.createNewBranch("HAMBRANCH", "HAMCOD");
+	    	Assert.assertTrue(branchPage.isDeleteBranchSuccessful("HAMBRANCH", "HAMCOD"));
+    	} catch(Exception nse) {
+			System.out.println("'Exception in test testDeleteActionOnNewBranch");
+			nse.printStackTrace();
+		}
+    } 
+   /** 
+    @Test(dataProviderClass = DataProviders.class, dataProvider="InvalidLoginDataProvider")
+    public void testGurukulaFailedLogin(String username, String password) {
+    	loginPage = new LoginPage(driver);
+    	loginPage.loginToGurukula(username, password);
+    	Assert.assertTrue(loginPage.hasLoginFailed());
+    }
+ */
+    @AfterMethod
+    public void tearDown() {
+    	super.tearDown();
+    	System.out.println("Dispose the WebDriver after each test run");
+    	driver.quit();
+    	
+    }
+    
+    private void loginAndNavigateToBranchesPage()
+    {
+    	loginPage = new LoginPage(driver);
+    	loginPage.loginToGurukula("admin", "admin");
+    	Assert.assertTrue(loginPage.isLoginSuccessful());
+    	
+    	loggedInPage = new LoggedInPage(driver);
+    	Assert.assertTrue(loggedInPage.isLoggedIn());
+    	loggedInPage.clickEntities();
+    	loggedInPage.clickBranch();
+    }
+	
+}

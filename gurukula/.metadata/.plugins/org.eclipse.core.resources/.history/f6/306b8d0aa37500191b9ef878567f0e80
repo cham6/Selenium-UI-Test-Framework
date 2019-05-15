@@ -1,0 +1,286 @@
+package com.gurukula.testgurukula.pages;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import com.gurukula.testgurukula.util.WebDriverWrapperUtil;
+
+/**
+ * Class to represent the Staff page. 
+ * Contains all the objects' locators and corresponding functionalities on the objects of Staff page.
+ * @author Chandra.Sekhar.Muttineni
+ *
+ */
+
+public class StaffPage extends BasePage {
+	
+	//Page Factory locators and their corresponding web elements.
+	
+	@FindBy(xpath="//h2[text()='Staffs']")
+	WebElement staffLabel;
+	
+	@FindBy(xpath="//span[text()='Create a new Staff']")
+	WebElement createNewStaffButton;
+	
+	@FindBy(id="searchQuery")
+	WebElement searchText;
+	
+	@FindBy(xpath="//span[text()='Search a Staff']")
+	WebElement searchButton;
+	
+	@FindBy(xpath="//*[@class='table table-striped']")
+	WebElement staffWebTable;
+	
+	@FindBy(id="myStaffLabel")
+	WebElement createOrEditStaffLabel;
+	
+	@FindBy(xpath="//input[@name='id']")
+	WebElement readonlyIDTextBox;
+	
+	@FindBy(xpath="//input[@name='name']")
+	WebElement staffNameTextbox;
+	
+	@FindBy(xpath="//select[@name='related_branch']")
+	WebElement staffRelatedBranch;
+	
+	@FindBy(xpath="//span[text()='Cancel']")
+	WebElement cancelButton;
+	
+	@FindBy(xpath="//*[@id='saveStaffModal']/div/div/form/div[3]/button[2]")
+	WebElement saveButton;
+	
+	@FindBy(xpath="//span[text()='Back']")
+	WebElement backButton;
+	
+	@FindBy(xpath="//h2[text()='Confirm delete operation']")
+	WebElement confirmDeleteLabel;
+	
+	@FindBy(xpath="//*[@id='deleteStaffConfirmation']/div/div/form/div[3]/button[2]")
+	WebElement deleteButton;
+	
+	@FindBy(xpath="//*[@id='saveStaffModal']/div/div/form/div[2]/div[2]/input")
+	WebElement editStaffName;
+
+	@FindBy(xpath="//*[@id='saveStaffModal']/div/div/form/div[2]/div[3]/select")
+	WebElement editStaffRelatedBranch;
+	
+	public StaffPage(WebDriver wd) {
+		super(wd);
+		PageFactory.initElements(driver, this);
+	}
+	
+	private void clickCreateNewStaff() {
+		createNewStaffButton.click();
+	}
+	
+	private boolean isCreateOrEditStaffLabelPresent() {
+		return createOrEditStaffLabel.isDisplayed();
+	}
+	
+	private void setStaffName(String branchName) {
+		staffNameTextbox.sendKeys(branchName);
+	}
+	
+	private void setStaffRelatedBranch(String branchName) {
+		WebDriverWrapperUtil.selectItemFromDropdown(staffRelatedBranch, branchName);
+	}
+	
+	private void editStaffName(String branchName) {
+		editStaffName.clear();
+		editStaffName.sendKeys(branchName);
+	}
+	
+	private void editStaffRelatedBranch(String branchName) {
+		WebDriverWrapperUtil.selectItemFromDropdown(staffRelatedBranch, branchName);
+	}
+	
+	private void saveStaff() {
+		if(!saveButton.isEnabled()) {
+			return;
+		}
+		saveButton.click();
+	}
+	
+	public void cancelNewStaffWizard() {
+		cancelButton.click();
+	}
+	
+	private void clickOnBackButton() {
+		backButton.click();
+	}
+	
+	public boolean isSaveEnabled() {
+		
+		try {
+			return saveButton.isEnabled();
+		} catch(NoSuchElementException nse) {
+			System.out.println("'Save button is not enabled");
+			nse.printStackTrace();
+			return false;
+		}
+	}
+	
+	public void searchForBranch(String queryText) {
+		searchText.sendKeys(queryText);
+		searchButton.click();
+	}
+
+	/**
+	 * This method will be exposed to Tests
+	 * @param userName
+	 * @param password
+	 * @throws InterruptedException 
+	 */
+	public void createNewStaff(String staffName, String staffRelatedBranchName){
+		
+		clickCreateNewStaff();
+		setStaffName(staffName);
+		setStaffRelatedBranch(staffRelatedBranchName);
+		
+		saveStaff();
+		
+	}
+	
+	public boolean isStaffAvailable(String staffName, String staffRelatedBranchName){
+		try {
+			if(WebDriverWrapperUtil.getWebTableCellElement(staffWebTable, staffName) == null) {
+				return false;
+			}
+			
+			if(WebDriverWrapperUtil.getWebTableCellElement(staffWebTable, staffRelatedBranchName) == null) {
+				return false;
+			}
+			return true;
+		}
+		catch(NoSuchElementException nse) {
+			System.out.println("'Staff not found during table check.");
+			return false;
+		}
+	}
+	
+	public boolean isViewStaffSuccessful(String staffName, String staffRelatedBranchName){
+		Map<String, String> customMap = new HashMap<String, String>();
+		customMap.put("Name", staffName);
+		customMap.put("Code", staffRelatedBranchName);
+		customMap.put("Action", "View");
+		try {
+			WebElement viewElement = 
+					WebDriverWrapperUtil.getBranchStaffTableActionElement(staffWebTable, customMap);
+				
+			if(viewElement == null) {
+				System.out.println("View action is not available for the given staff "+ staffName);
+				return false;
+			}
+			viewElement.click();
+			
+			if(driver.findElement(By.xpath("//input[@value='"+staffName+"']")) == null) {
+				return false;
+			}
+			
+			if(driver.findElement(By.xpath("//input[@value='"+staffRelatedBranchName+"']")) == null) {
+				return false;
+			}
+			
+			clickOnBackButton();
+			return true;
+			
+		}
+		catch(NoSuchElementException nse) {
+			System.out.println("Element not found during table check.");
+			return false;
+		}
+		catch(Exception e) {
+			System.out.println("Exception while viewing the staff Name and related branch Code");
+			return false;
+		}
+	}
+	
+	public boolean isEditStaffSuccessful(String staffName, String staffRelatedBranchName, 
+						String newStaffName, String newStaffRelatedBranchCode) {
+		
+		Map<String, String> customMap = new HashMap<String, String>();
+		customMap.put("Name", staffName);
+		customMap.put("Code", staffRelatedBranchName);
+		customMap.put("Action", "Edit");
+		try {
+			WebElement editElement = 
+					WebDriverWrapperUtil.getBranchStaffTableActionElement(staffWebTable, customMap);
+				
+			if(editElement == null) {
+				System.out.println("Edit action is not available for the given staff "+ staffName);
+				return false;
+			}
+			editElement.click();
+			Thread.sleep(2000);
+			editStaffName(newStaffName);
+			editStaffRelatedBranch(newStaffRelatedBranchCode);
+			saveStaff();
+			Thread.sleep(2000);
+			searchForBranch(newStaffName);
+			
+			return isStaffAvailable(newStaffName, newStaffRelatedBranchCode);
+		}
+		catch(NoSuchElementException nse) {
+			System.out.println("Element not found during table check.");
+			System.out.println(nse.getStackTrace());
+			return false;
+		}
+		catch(Exception e) {
+			System.out.println("Exception while viewing the branch Name and Code");
+			System.out.println(e.getStackTrace());
+			return false;
+		}
+	}
+	
+	
+	public boolean isDeleteStaffSuccessful(String staffName, String staffRelatedBranchName) 
+	{
+
+		Map<String, String> customMap = new HashMap<String, String>();
+		customMap.put("Name", staffName);
+		customMap.put("Code", staffRelatedBranchName);
+		customMap.put("Action", "Delete");
+		try {
+			WebElement deleteElement = 
+					WebDriverWrapperUtil.getBranchStaffTableActionElement(staffWebTable, customMap);
+				
+			if(deleteElement == null) {
+				System.out.println("Delete action is not available for the given staff "+ staffName);
+				return false;
+			}
+			deleteElement.click();
+			Thread.sleep(1000);
+			deleteButton.click();
+			Thread.sleep(1000);
+			searchForBranch(staffName);
+			return !isStaffAvailable(staffName, staffRelatedBranchName);
+		}
+		catch(NoSuchElementException nse) {
+			System.out.println("Element not found during table check.");
+			System.out.println(nse.getStackTrace());
+			return false;
+		}
+		catch(Exception e) {
+			System.out.println("Exception while deleting the branch.");
+			System.out.println(e.getStackTrace());
+			return false;
+		}
+	}
+
+
+}

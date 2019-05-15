@@ -1,0 +1,113 @@
+package com.gurukula.testgurukula.pages;
+
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import com.gurukula.testgurukula.util.WebDriverWrapperUtil;
+
+public class SettingsPage {
+	
+WebDriver driver;
+	
+	@FindBy(xpath="//div[contains(text(),'User settings for')]")
+	WebElement settingsLabel;
+	
+	@FindBy(xpath="//input[@name='firstName']")
+	WebElement firstName;
+	
+	@FindBy(xpath="//input[@name='lastName']")
+	WebElement lastName;
+	
+	@FindBy(xpath="//input[@name='email']")
+	WebElement email;
+	
+	@FindBy(xpath="//select[@name='langKey']")
+	WebElement selectLanguage;
+
+	@FindBy(xpath="//button[text()='Save']")
+	WebElement saveButton;
+	
+	@FindBy(xpath="//div[contains(text(),'Settings saved!')]")
+	WebElement settingsSavedSuccessfully;
+	
+	@FindBy(xpath="//div[contains(text(),'Settings could not be saved.')]")
+	WebElement settingsSaveFailed;
+
+	public SettingsPage(WebDriver wd) {
+		driver = wd;
+		PageFactory.initElements(driver, this);
+	}
+	
+	private void setFirstName(String firstname) {
+		if(firstName == null) {
+			return;
+		}
+		firstName.sendKeys(firstname);
+	}
+	
+	private void setLastName(String lastname) {
+		if(lastname == null) {
+			return;
+		}
+		lastName.sendKeys(lastname);
+	}
+	
+	private void setEmail(String emailInput) {
+		if(emailInput == null) {
+			return;
+		}
+		email.sendKeys(emailInput);
+	}
+	
+	private void setLanguage(String language) {
+		if(language == null) {
+			return;
+		}
+		WebDriverWrapperUtil.selectItemFromDropdown(selectLanguage,language);
+	}
+
+	private void clickSubmit() {
+		submitButton.click();
+	}
+	
+	public boolean isLoginSuccessful() {
+		
+		try {
+			return loginSuccessful.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("'You are logged in as user' message is not shown. "
+					+ "Login has failed");
+			nse.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean hasLoginFailed() {
+		
+		try {
+			return loginFailed.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("'Please check your credentials and try again' text is not shown."
+					+ " Login has been successful.");
+			return false;
+		}
+	}
+	
+	/**
+	 * This method will be exposed to Tests
+	 * @param userName
+	 * @param password
+	 * @throws InterruptedException 
+	 */
+	public void loginToGurukula(String userName, String password){
+		
+		clickLogin();
+		setUserName(userName);
+		setPassword(password);
+		clickSubmit();
+	}
+
+}

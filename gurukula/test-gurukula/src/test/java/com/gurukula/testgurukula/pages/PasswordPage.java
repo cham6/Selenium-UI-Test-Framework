@@ -1,0 +1,113 @@
+package com.gurukula.testgurukula.pages;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import com.gurukula.testgurukula.util.WebDriverWrapperUtil;
+
+/**
+ * Class to represent the Password change page. 
+ * Contains all the objects' locators and corresponding functionalities on the 
+ * objects of Password change page.
+ * @author Chandra.Sekhar.Muttineni
+ *
+ */
+
+public class PasswordPage extends BasePage {
+
+	//Page Factory locators and their corresponding web elements.
+	
+	@FindBy(xpath="//h2[contains(text(),'Password for')]")
+	WebElement passwordLabel;
+	
+	@FindBy(xpath="//input[@name='password']")
+	WebElement password;
+	
+	@FindBy(xpath="//input[@name='confirmPassword']")
+	WebElement confirmPassword;
+
+	@FindBy(xpath="//button[text()='Save']")
+	WebElement saveButton;
+	
+	@FindBy(xpath="//strong[contains(text(),'Password saved')]")
+	WebElement passwordSavedSuccessfully;
+	
+	@FindBy(xpath="//div[contains(text(),'The password could not be changed')]")
+	WebElement passwordSaveFailed;
+
+	//Constructor that initializes the Driver object in parent and use it for current page
+	public PasswordPage(WebDriver wd) {
+		super(wd);
+		PageFactory.initElements(driver, this);
+	}
+	
+	//Actions on initialized WebElements.
+	private void setPassword(String strPassword) {
+		if(strPassword == null) {
+			return;
+		}
+		password.clear();
+		password.sendKeys(strPassword);
+	}
+	
+	private void setConfirmPassword(String strConfirmPassword) {
+		if(strConfirmPassword == null) {
+			return;
+		}
+		confirmPassword.clear();
+		confirmPassword.sendKeys(strConfirmPassword);
+	}
+
+	private void clickSave() {
+		saveButton.click();
+	}
+	
+	/**
+	 * Check if the password is saved successfully.
+	 * @return
+	 */
+	public boolean hasPasswordSavedSuccessfully() {
+		
+		try {
+			return passwordSavedSuccessfully.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("Failed to save the password.");
+			nse.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean hasSavePasswordFailed() {
+		
+		try {
+			return passwordSaveFailed.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("password has been saved successfully.");
+			return false;
+		}
+	}
+	
+	/**
+	 * This method will be exposed to Tests
+	 * @param password
+	 * @param confirmPassword
+	 */
+	public void savePassword(String password, String confirmPassword){
+		setPassword(password);
+		setConfirmPassword(confirmPassword);
+		clickSave();
+	}
+
+	
+}

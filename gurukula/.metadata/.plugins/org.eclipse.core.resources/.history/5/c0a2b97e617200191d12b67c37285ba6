@@ -1,0 +1,60 @@
+package com.gurukula.testgurukula.testData;
+
+import java.io.File;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.testng.annotations.DataProvider;
+
+import com.gurukula.testgurukula.util.TestDataHandler;
+
+public class DataProviders {
+	
+	static String testDataFolder = TestConstants.TESTDATA_FOLDER;
+	static String invalidLoginFileName = testDataFolder + File.separator + "FailureLoginTestData.xls";
+	static String validLoginFileName = testDataFolder + File.separator + "ValidLoginTestData.xls";
+	static String validEmailFileName = testDataFolder + File.separator + "ValidEmailTestData.xls";
+	static String invalidEmailFileName = testDataFolder + File.separator + "FailureEmailTestData.xls";
+	static String validRegistrationFileName = testDataFolder + File.separator + "ValidRegistrationTestData.xls";
+	static String invalidRegistrationFileName = testDataFolder + File.separator + "FailureRegistrationTestData.xls";
+
+	@DataProvider(name="InvalidLoginDataProvider")
+    public static Object[][] getNullEmptyLongDataProvider() {
+    	
+    	return TestDataHandler.readTwoCellTestData(invalidLoginFileName);
+    } 
+    
+    @DataProvider(name="ValidLoginDataProvider")
+    public static Object[][] getValidLoginDataProvider() {
+    	
+    	return TestDataHandler.readTwoCellTestData(validLoginFileName);
+    } 
+    
+    @DataProvider(name="ValidEMailDataProvider")
+    public static Object[][] getValidEMailDataProvider() {
+    	
+    	return TestDataHandler.readOneCellTestData(validEmailFileName);
+    	
+    } 
+    
+    @DataProvider(name="InvalidEMailDataProvider")
+    public static Object[][] getInvalidEMailDataProvider() {
+    	
+    	return TestDataHandler.readOneCellTestData(invalidEmailFileName);
+    	
+    }
+    
+    @DataProvider(name="ValidRegistrationDataProvider")
+    public static Object[][] getValidRegistrationDataProvider() {
+    	
+    	return TestDataHandler.readFourCellTestData(validRegistrationFileName);
+    	
+    } 
+    
+    @DataProvider(name="InvalidRegistrationDataProvider")
+    public static Object[][] getInvalidRegistrationDataProvider() {
+    	
+    	return TestDataHandler.readFourCellTestData(invalidRegistrationFileName);
+    	
+    }
+    
+}

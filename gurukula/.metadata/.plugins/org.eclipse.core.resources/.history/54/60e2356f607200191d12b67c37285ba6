@@ -1,0 +1,196 @@
+package com.gurukula.testgurukula.util;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+
+public class TestDataHandler {
+	
+	public static Object[][] readTwoCellTestData(String fileName) {
+		HSSFWorkbook workbook = null;
+		HSSFSheet sheet;
+		Object[][] dataCollected;
+		FileInputStream fileInputStream = null;
+		try {
+			File srcFile=new File(fileName);
+			fileInputStream = new FileInputStream(srcFile);
+			workbook = new HSSFWorkbook(fileInputStream);
+			sheet= workbook.getSheetAt(0);
+			int numberOfRows = sheet.getLastRowNum();
+			dataCollected = new Object[numberOfRows][2];
+			for(int i=1; i<=numberOfRows; i++) {
+				dataCollected[i-1][0] = sheet.getRow(i).getCell(0).toString();
+				dataCollected[i-1][1] = sheet.getRow(i).getCell(1).toString();
+			}
+			workbook.close();
+			fileInputStream.close();
+			return dataCollected;
+		} catch(IOException ioe) {
+			System.out.println("An IOException has occurred in readTwoCellTestData method.");
+			System.out.println(ioe.getMessage());
+		} catch(Exception e) {
+			System.out.println("An unknown Exception has occurred in readTwoCellTestData method.");
+			System.out.println(e.getMessage());
+		}finally {
+			if (workbook != null) {
+				try {
+					workbook.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (fileInputStream != null) {
+				try {
+					fileInputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static Object[][] readOneCellTestData(String fileName) {
+		HSSFWorkbook workbook = null;
+		HSSFSheet sheet;
+		Object[][] dataCollected;
+		FileInputStream fileInputStream = null;
+		try {
+			File srcFile=new File(fileName);
+			fileInputStream = new FileInputStream(srcFile);
+			workbook = new HSSFWorkbook(fileInputStream);
+			sheet= workbook.getSheetAt(0);
+			int numberOfRows = sheet.getLastRowNum();
+			dataCollected = new Object[numberOfRows][1];
+			for(int i=1; i<=numberOfRows; i++) {
+				dataCollected[i-1][0] = sheet.getRow(i).getCell(0).toString();
+			}
+			workbook.close();
+			fileInputStream.close();
+			return dataCollected;
+		} catch(IOException ioe) {
+			System.out.println("An IOException has occurred in readOneCellTestData method.");
+			System.out.println(ioe.getMessage());
+		} catch(Exception e) {
+			System.out.println("An unknown Exception has occurred in readOneCellTestData method.");
+			System.out.println(e.getMessage());
+		}finally {
+			if (workbook != null) {
+				try {
+					workbook.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (fileInputStream != null) {
+				try {
+					fileInputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static Object[][] readThreeCellTestData(String fileName) {
+		HSSFWorkbook workbook = null;
+		HSSFSheet sheet;
+		Object[][] dataCollected;
+		FileInputStream fileInputStream = null;
+		try {
+			File srcFile=new File(fileName);
+			fileInputStream = new FileInputStream(srcFile);
+			workbook = new HSSFWorkbook(fileInputStream);
+			sheet= workbook.getSheetAt(0);
+			int numberOfRows = sheet.getLastRowNum();
+			dataCollected = new Object[numberOfRows][3];
+			for(int i=1; i<=numberOfRows; i++) {
+				dataCollected[i-1][0] = sheet.getRow(i).getCell(0).toString();
+				dataCollected[i-1][1] = sheet.getRow(i).getCell(1).toString();
+				dataCollected[i-1][2] = sheet.getRow(i).getCell(2).toString();
+			}
+			workbook.close();
+			fileInputStream.close();
+			return dataCollected;
+		} catch(IOException ioe) {
+			System.out.println("An IOException has occurred in readThreeCellTestData method.");
+			System.out.println(ioe.getMessage());
+		} catch(Exception e) {
+			System.out.println("An unknown Exception has occurred in readThreeCellTestData method.");
+			System.out.println(e.getMessage());
+		}finally {
+			if (workbook != null) {
+				try {
+					workbook.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (fileInputStream != null) {
+				try {
+					fileInputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static Object[][] readFourCellTestData(String fileName) {
+		HSSFWorkbook workbook = null;
+		HSSFSheet sheet;
+		Object[][] dataCollected;
+		FileInputStream fileInputStream = null;
+		try {
+			File srcFile=new File(fileName);
+			fileInputStream = new FileInputStream(srcFile);
+			workbook = new HSSFWorkbook(fileInputStream);
+			sheet= workbook.getSheetAt(0);
+			int numberOfRows = sheet.getLastRowNum();
+			dataCollected = new Object[numberOfRows][4];
+			for(int i=1; i<=numberOfRows; i++) {
+				dataCollected[i-1][0] = sheet.getRow(i).getCell(0).toString();
+				dataCollected[i-1][1] = sheet.getRow(i).getCell(1).toString();
+				dataCollected[i-1][2] = sheet.getRow(i).getCell(2).toString();
+				dataCollected[i-1][3] = sheet.getRow(i).getCell(3).toString();
+			}
+			workbook.close();
+			fileInputStream.close();
+			return dataCollected;
+		} catch(IOException ioe) {
+			System.out.println("An IOException has occurred in readThreeCellTestData method.");
+			System.out.println(ioe.getMessage());
+		} catch(Exception e) {
+			System.out.println("An unknown Exception has occurred in readThreeCellTestData method.");
+			System.out.println(e.getMessage());
+		}finally {
+			if (workbook != null) {
+				try {
+					workbook.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (fileInputStream != null) {
+				try {
+					fileInputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
+	}
+}

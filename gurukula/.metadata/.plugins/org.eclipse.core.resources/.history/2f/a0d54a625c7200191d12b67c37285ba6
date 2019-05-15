@@ -1,0 +1,118 @@
+package com.gurukula.testgurukula.pages;
+
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class RegistrationPage {
+
+WebDriver driver;
+	
+	@FindBy(xpath="//h1[text()='Registration']")
+	WebElement registrationLabel;
+	
+	@FindBy(xpath="//input[@name='login']")
+	WebElement loginTextBox;
+	
+	@FindBy(xpath="//input[@name='email']")
+	WebElement emailTextBox;
+	
+	@FindBy(xpath="//input[@name='password']")
+	WebElement passwordTextBox;
+	
+	@FindBy(xpath="//input[@name='confirmPassword']")
+	WebElement confirmPasswordloginTextBox;
+	
+	@FindBy(xpath="//button[text()='Register']")
+	WebElement registerButton;
+	
+	@FindBy(xpath="//div[contains(text(),'Please try again later.')]")
+	WebElement registrationFailed;
+	
+	@FindBy(xpath="//div[contains(text(),'Registeration is successful')]")
+	WebElement registrationSuccessful;
+
+	public RegistrationPage(WebDriver wd) {
+		driver = wd;
+		PageFactory.initElements(driver, this);
+	}
+	
+	private void setLogin(String username) {
+		if(username == null) {
+			return;
+		}
+		loginTextBox.sendKeys(username);
+	}
+	
+	private void setEmail(String email) {
+		if(email == null) {
+			return;
+		}
+		emailTextBox.sendKeys(email);
+	}
+	
+	private void setPassword(String password) {
+		if(password == null) {
+			return;
+		}
+		passwordTextBox.sendKeys(password);
+	}
+	
+	private void setConfirmPassword(String confirmPassword) {
+		if(confirmPassword == null) {
+			return;
+		}
+		confirmPasswordloginTextBox.sendKeys(confirmPassword);
+	}
+	
+	private void clickRegister() {
+		registerButton.click();
+	}
+	
+	public boolean isRegisterButtonEnabled() {
+		return registerButton.isEnabled();
+	}
+	
+	public boolean isRegistrationPage() {
+		return registrationLabel.isDisplayed();
+	}
+	
+	public boolean isLoginSuccessful() {
+		
+		try {
+			return registrationSuccessful.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("'Registration has failed.");
+			nse.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean hasLoginFailed() {
+		
+		try {
+			return registrationFailed.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("'Registration has been successful.");
+			return false;
+		}
+	}
+	
+	/**
+	 * This method will be exposed to Tests
+	 * @param userName
+	 * @param password
+	 * @throws InterruptedException 
+	 */
+	public void newUserRegistration(String loginName, String email, 
+			String password, String confirmPassword){
+		
+		clickLogin();
+		setUserName(userName);
+		setPassword(password);
+		clickSubmit();
+	}
+	
+}

@@ -1,0 +1,82 @@
+package com.gurukula.testgurukula.testData;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import java.io.File;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.testng.annotations.DataProvider;
+
+import com.gurukula.testgurukula.util.TestDataHandler;
+
+public class DataProviders {
+	
+	static String testDataFolder = TestConstants.TESTDATA_FOLDER;
+	static String invalidLoginFileName = testDataFolder + File.separator + "FailureLoginTestData.xls";
+	static String validLoginFileName = testDataFolder + File.separator + "ValidLoginTestData.xls";
+	static String validEmailFileName = testDataFolder + File.separator + "ValidEmailTestData.xls";
+	static String invalidEmailFileName = testDataFolder + File.separator + "FailureEmailTestData.xls";
+	static String validRegistrationFileName = testDataFolder + File.separator + "ValidRegistrationTestData.xls";
+	static String invalidRegistrationFileName = testDataFolder + File.separator + "FailureRegistrationTestData.xls";
+	static String validBranchDataFileName = testDataFolder + File.separator + "ValidBranchTestData.xls";
+	static String invalidBranchDataFileName = testDataFolder + File.separator + "InValidBranchTestData.xls";
+
+	@DataProvider(name="InvalidLoginDataProvider")
+    public static Object[][] getNullEmptyLongDataProvider() {
+    	
+    	return TestDataHandler.readTestData(invalidLoginFileName, 2);
+    } 
+    
+    @DataProvider(name="ValidLoginDataProvider")
+    public static Object[][] getValidLoginDataProvider() {
+    	
+    	return TestDataHandler.readTestData(validLoginFileName, 2);
+    } 
+    
+    @DataProvider(name="ValidEMailDataProvider")
+    public static Object[][] getValidEMailDataProvider() {
+    	
+    	return TestDataHandler.readTestData(validEmailFileName, 1);
+    	
+    } 
+    
+    @DataProvider(name="InvalidEMailDataProvider")
+    public static Object[][] getInvalidEMailDataProvider() {
+    	
+    	return TestDataHandler.readTestData(invalidEmailFileName, 1);
+    	
+    }
+    
+    @DataProvider(name="ValidRegistrationDataProvider")
+    public static Object[][] getValidRegistrationDataProvider() {
+    	
+    	return TestDataHandler.readTestData(validRegistrationFileName, 4);
+    } 
+    
+    @DataProvider(name="InvalidRegistrationDataProvider")
+    public static Object[][] getInvalidRegistrationDataProvider() {
+    	
+    	return TestDataHandler.readTestData(invalidRegistrationFileName, 4);
+    	
+    }
+    
+    @DataProvider(name="ValidRegistrationDataProvider")
+    public static Object[][] getValidRegistrationDataProvider() {
+    	
+    	return TestDataHandler.readTestData(validRegistrationFileName, 4);
+    } 
+    
+    @DataProvider(name="InvalidRegistrationDataProvider")
+    public static Object[][] getInvalidRegistrationDataProvider() {
+    	
+    	return TestDataHandler.readTestData(invalidRegistrationFileName, 4);
+    	
+    }
+    
+}

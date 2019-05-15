@@ -1,0 +1,116 @@
+package com.gurukula.testgurukula.tests;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.gurukula.testgurukula.implementations.TestBaseImpl;
+import com.gurukula.testgurukula.pages.BranchPage;
+import com.gurukula.testgurukula.pages.LoggedInPage;
+import com.gurukula.testgurukula.pages.LoginPage;
+import com.gurukula.testgurukula.testData.DataProviders;
+import com.gurukula.testgurukula.util.TestUtil;
+
+public class TestBranchPage extends TestBaseImpl{
+
+	BranchPage branchPage;
+	LoginPage loginPage;
+	LoggedInPage loggedInPage;
+	WebDriver driver;
+	String context = "Branch";
+	
+    @BeforeMethod
+    public void setUp() {
+    	super.setUp();
+    	driver = new FirefoxDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        TestUtil.loginAndNavigateToContext(driver, context);
+    }
+
+    
+    @Test(dataProviderClass = DataProviders.class, dataProvider="ValidBranchDataProvider")
+    public void testNewBranchCreationSuccessful(String branchName, String branchCode) {
+    	try {
+	    	branchPage = new BranchPage(driver);
+	    	branchPage.createNewBranch(branchName, branchCode);
+	    	Assert.assertTrue(branchPage.isViewBranchSuccessful(branchName, branchCode));	    	
+    	} catch(Exception e) {
+			System.out.println("New Branch creation has failed in testNewBranchCreationSuccessful."
+					+ " Test failed. ");
+			e.printStackTrace();
+		}
+    }
+    
+    @Test(dataProviderClass = DataProviders.class, dataProvider="InvalidBranchDataProvider")
+    public void testNewBranchCreationFailure() {
+    	try {
+	    	branchPage = new BranchPage(driver);
+	    	branchPage.createNewBranch("CHAMBRANCH", "CHAMCODE");
+	    	Assert.assertTrue(branchPage.isViewBranchSuccessful("CHAMBRANCH", "CHAMCODE"));	    	
+    	} catch(Exception e) {
+			System.out.println("'Save button is not enabled");
+			e.printStackTrace();
+		}
+    }
+ 
+    @Test
+    public void testViewActionOnNewBranch() {
+    	try {
+	    	branchPage = new BranchPage(driver);
+	    	branchPage.createNewBranch("VIEWNAME", "VIEWCODE");
+	    	Assert.assertTrue(branchPage.isViewBranchSuccessful("VIEWNAME", "VIEWCODE"));
+    	} catch(Exception e) {
+			System.out.println("'Save button is not enabled");
+			e.printStackTrace();
+		}
+    }
+  
+    @Test
+    public void testEditActionOnNewBranch() {
+    	try {
+	    	branchPage = new BranchPage(driver);
+	    	branchPage.createNewBranch("EDITNAME", "EDITCODE");
+	    	Assert.assertTrue(branchPage.isEditBranchSuccessful("EDITNAME", "EDITCODE", 
+	    			"EDITEDNAME", "EDITEDCODE"));
+    	} catch(Exception e) {
+			System.out.println("'Exception in test testEditActionOnNewBranch");
+			e.printStackTrace();
+		}
+    }
+    
+    @Test
+    public void testDeleteActionOnNewBranch() {
+    	try {
+	    	branchPage = new BranchPage(driver);
+	    	branchPage.createNewBranch("DELETEBRANCH", "DELETECODE");
+	    	Assert.assertTrue(branchPage.isDeleteBranchSuccessful("DELETEBRANCH", "DELETECODE"), 
+	    			"The deleted Branch has found during search");
+    	} catch(Exception e) {
+			System.out.println("'Exception in test testDeleteActionOnNewBranch");
+			e.printStackTrace();
+		}
+    } 
+    
+    @AfterMethod
+    public void tearDown() {
+    	super.tearDown();
+    	System.out.println("Dispose the WebDriver after each test run");
+    	driver.quit();
+    	
+    }
+	
+}

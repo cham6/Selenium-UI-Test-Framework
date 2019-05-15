@@ -1,0 +1,75 @@
+package com.gurukula.testgurukula.pages;
+
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class LoggedInPage {
+	
+WebDriver driver;
+	
+	@FindBy(xpath="//span[text()='Entities']")
+	WebElement entities;
+	
+	@FindBy(xpath="//span[text()='Branch']")
+	WebElement branch;
+	
+	@FindBy(xpath="//span[text()='Staff']")
+	WebElement staff;
+	
+	@FindBy(xpath="//span[text()='Account']")
+	WebElement account;
+	
+	@FindBy(xpath="//span[text()='Settings']")
+	WebElement settings;
+	
+	@FindBy(xpath="//span[text()='Sessions']")
+	WebElement sessions;
+	
+	@FindBy(xpath="//span[text()='Log out']")
+	WebElement logout;
+	
+	@FindBy(xpath="//span[text()='Home']")
+	WebElement home;
+
+	public LoggedInPage(WebDriver wd) {
+		driver = wd;
+		PageFactory.initElements(driver, this);
+	}
+	
+	public boolean isLoggedIn() {
+		try {
+			return entities.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("'The user is not logged in.");
+			nse.printStackTrace();
+			return false;
+		}
+	}
+	
+	public void clickEntities() {
+		entities.click();
+	}
+	
+	public void clickBranch() {
+		branch.click();
+	}
+	
+	public void clickEntities() {
+		entities.click();
+	}
+	
+	public void clickEntities() {
+		entities.click();
+	}
+	
+	public void clickEntities() {
+		entities.click();
+	}
+	
+	public void clickEntities() {
+		entities.click();
+	}
+}

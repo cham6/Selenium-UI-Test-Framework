@@ -1,0 +1,113 @@
+package com.gurukula.testgurukula.tests;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.gurukula.testgurukula.pages.StaffPage;
+import com.gurukula.testgurukula.testData.DataProviders;
+import com.gurukula.testgurukula.util.TestUtil;
+import com.gurukula.testgurukula.implementations.TestBaseImpl;
+import com.gurukula.testgurukula.pages.LoggedInPage;
+import com.gurukula.testgurukula.pages.LoginPage;
+
+public class TestStaffPage extends TestBaseImpl{
+	
+	StaffPage StaffPage;
+	LoginPage loginPage;
+	LoggedInPage loggedInPage;
+	WebDriver driver;
+	String context = "Staff";
+	
+    @BeforeMethod
+    public void setUp() {
+    	super.setUp();
+    	driver = new FirefoxDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        TestUtil.loginAndNavigateToContext(driver, context);
+        StaffPage = new StaffPage(driver);
+    }
+
+    @Test(dataProviderClass = DataProviders.class, dataProvider="ValidStaffDataProvider")
+    public void testNewBranchCreationSuccessful(String staffName, String staffBranchCode) {
+    	try {
+	    	
+	    	StaffPage.createNewStaff(staffName, staffBranchCode);
+	    	Assert.assertTrue(StaffPage.isViewStaffSuccessful(staffName, staffBranchCode));	    	
+    	} catch(Exception e) {
+			System.out.println("'Save button is not enabled");
+			e.printStackTrace();
+			Assert.fail("Test failed due to some exception");
+		}
+    }
+    
+    @Test(dataProviderClass = DataProviders.class, dataProvider="InvalidStaffDataProvider")
+    public void testNewBranchCreationFailure(String staffName, String staffBranchCode) {
+    	try {
+	    	StaffPage.createNewStaff(staffName, staffBranchCode);
+	    	Assert.assertTrue(StaffPage.isViewStaffSuccessful(staffName, staffBranchCode));	    	
+    	} catch(Exception e) {
+			System.out.println("'Save button is not enabled");
+			e.printStackTrace();
+			Assert.fail("Test failed due to some exception");
+		}
+    }
+ 
+    @Test
+    public void testViewActionOnNewBranch() {
+    	try {
+	    	StaffPage.createNewStaff("CHAMSTAFFA", "EDITEDNAME");
+	    	Assert.assertTrue(StaffPage.isViewStaffSuccessful("CHAMSTAFFA", "EDITEDNAME"));
+    	} catch(Exception e) {
+			System.out.println("'Save button is not enabled");
+			e.printStackTrace();
+			Assert.fail("Test failed due to some exception");
+		}
+    }
+  
+    @Test
+    public void testEditActionOnNewBranch() {
+    	try {
+	    	StaffPage.createNewStaff("CHAMSTAFFB", "EDITEDNAME");
+	    	Assert.assertTrue(StaffPage.isEditStaffSuccessful("CHAMSTAFFB", "EDITEDNAME", 
+	    			"CHAMSTAFFC", "EDITEDNAME"));
+    	} catch(Exception e) {
+			System.out.println("'Exception in test testEditActionOnNewBranch");
+			e.printStackTrace();
+			Assert.fail("Test failed due to some exception");
+		}
+    }
+    
+    @Test
+    public void testDeleteActionOnNewBranch() {
+    	try {
+	    	StaffPage.createNewStaff("CHAMSTAFFN", "EDITEDNAME");
+	    	Assert.assertTrue(StaffPage.isDeleteStaffSuccessful("CHAMSTAFFN", "EDITEDNAME"), 
+	    			"The deleted Staff has found during search");
+    	} catch(Exception e) {
+			System.out.println("'Exception in test testDeleteActionOnNewBranch");
+			e.printStackTrace();
+			Assert.fail("Test failed due to some exception");
+		}
+    }
+ 
+    @AfterMethod
+    public void tearDown() {
+    	super.tearDown();
+    	System.out.println("Dispose the WebDriver after each test run");
+    	driver.quit();
+    }
+}

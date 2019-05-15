@@ -1,0 +1,97 @@
+package com.gurukula.testgurukula.pages;
+
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import com.gurukula.testgurukula.util.WebDriverWrapperUtil;
+
+public class PasswordPage extends BasePage {
+
+//WebDriver driver;
+	
+	@FindBy(xpath="//h2[contains(text(),'Password for')]")
+	WebElement passwordLabel;
+	
+	@FindBy(xpath="//input[@name='password']")
+	WebElement password;
+	
+	@FindBy(xpath="//input[@name='confirmPassword']")
+	WebElement confirmPassword;
+
+	@FindBy(xpath="//button[text()='Save']")
+	WebElement saveButton;
+	
+	@FindBy(xpath="//strong[contains(text(),'Password saved')]")
+	WebElement passwordSavedSuccessfully;
+	
+	@FindBy(xpath="//div[contains(text(),'The password could not be changed')]")
+	WebElement passwordSaveFailed;
+
+	public PasswordPage(WebDriver wd) {
+		super(wd);
+		PageFactory.initElements(driver, this);
+	}
+	
+	private void setPassword(String strPassword) {
+		if(strPassword == null) {
+			return;
+		}
+		waitForElementToAppear(password);
+		password.clear();
+		password.sendKeys(strPassword);
+	}
+	
+	private void setConfirmPassword(String strConfirmPassword) {
+		if(strConfirmPassword == null) {
+			return;
+		}
+		waitForElementToAppear(confirmPassword);
+		confirmPassword.clear();
+		confirmPassword.sendKeys(strConfirmPassword);
+	}
+
+	private void clickSave() {
+		waitForElementToAppear(saveButton);
+		saveButton.click();
+	}
+	
+	public boolean hasPasswordSavedSuccessfully() {
+		
+		try {
+			waitForElementToAppear(passwordSavedSuccessfully);
+			return passwordSavedSuccessfully.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("Failed to save the password.");
+			nse.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean hasSavePasswordFailed() {
+		
+		try {
+			waitForElementToAppear(passwordSaveFailed);
+			return passwordSaveFailed.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("password has been saved successfully.");
+			return false;
+		}
+	}
+	
+	/**
+	 * This method will be exposed to Tests
+	 * @param userName
+	 * @param password
+	 * @throws InterruptedException 
+	 */
+	public void savePassword(String password, String confirmPassword){
+		setPassword(password);
+		setConfirmPassword(confirmPassword);
+		clickSave();
+	}
+
+	
+}

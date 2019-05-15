@@ -1,0 +1,142 @@
+package com.gurukula.testgurukula.tests;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.gurukula.testgurukula.pages.StaffPage;
+import com.gurukula.testgurukula.testData.DataProviders;
+import com.gurukula.testgurukula.util.TestUtil;
+import com.gurukula.testgurukula.implementations.TestBaseImpl;
+import com.gurukula.testgurukula.pages.LoggedInPage;
+import com.gurukula.testgurukula.pages.LoginPage;
+
+/**
+ * Test class to test all the scenarios on Staff page.
+ * @author Chandra.Sekhar.Muttineni
+ *
+ */
+
+public class TestStaffPage extends TestBaseImpl{
+	
+	StaffPage staffPage;
+	LoginPage loginPage;
+	LoggedInPage loggedInPage;
+	WebDriver driver;
+	String context = "Staff";
+	
+    @BeforeMethod
+    public void setUp() {
+    	super.setUp();
+    	driver = new FirefoxDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        TestUtil.loginAndNavigateToContext(driver, context);
+        staffPage = new StaffPage(driver);
+    }
+
+    /**
+     * Test new staff creation using valid data
+     * @param staffName
+     * @param staffBranchCode
+     */
+    @Test(dataProviderClass = DataProviders.class, dataProvider="ValidStaffDataProvider")
+    public void testNewStaffCreationSuccessful(String staffName, String staffBranchCode) {
+    	try {
+	    	staffPage.createNewStaff(staffName, staffBranchCode);
+	    	Assert.assertTrue(staffPage.isViewStaffSuccessful(staffName, staffBranchCode));	    	
+    	} catch(Exception e) {
+			System.out.println("Failed to create a new Staff.");
+			e.printStackTrace();
+			Assert.fail("Test failed due to some exception");
+		}
+    }
+    
+    /**
+     * Test new staff creation using invalid data.
+     * @param staffName
+     * @param staffBranchCode
+     */
+    @Test(dataProviderClass = DataProviders.class, dataProvider="InvalidStaffDataProvider")
+    public void testNewStaffCreationFailure(String staffName, String staffBranchCode) {
+    	try {
+	    	staffPage.createNewStaff(staffName, staffBranchCode);
+	    	Assert.assertFalse(staffPage.isSaveEnabled());
+	    	staffPage.cancelNewStaffWizard();
+	    	Assert.assertFalse(staffPage.isViewStaffSuccessful(staffName, staffBranchCode));	    	
+    	} catch(Exception e) {
+			System.out.println("Failed in testNewBranchCreationFailure test");
+			e.printStackTrace();
+			Assert.fail("Test failed due to some exception");
+		}
+    }
+ 
+    /**
+     * Test the view functionality for New staff
+     */
+    @Test
+    public void testViewActionOnNewStaff() {
+    	try {
+	    	staffPage.createNewStaff("CHAMSTAFFA", "EDITEDNAME");
+	    	Assert.assertTrue(staffPage.isViewStaffSuccessful("CHAMSTAFFA", "EDITEDNAME"));
+    	} catch(Exception e) {
+			System.out.println("'Save button is not enabled");
+			e.printStackTrace();
+			Assert.fail("Test failed due to some exception");
+		}
+    }
+  
+    /**
+     * Test the Edit functionality for new staff
+     */
+    @Test
+    public void testEditActionOnNewStaff() {
+    	try {
+	    	staffPage.createNewStaff("CHAMSTAFFB", "EDITEDNAME");
+	    	Assert.assertTrue(staffPage.isEditStaffSuccessful("CHAMSTAFFB", "EDITEDNAME", 
+	    			"CHAMSTAFFC", "EDITEDNAME"));
+    	} catch(Exception e) {
+			System.out.println("'Exception in test testEditActionOnNewBranch");
+			e.printStackTrace();
+			Assert.fail("Test failed due to some exception");
+		}
+    }
+    
+    /**
+     * Test the delete functionality for new staff
+     */
+    @Test
+    public void testDeleteActionOnNewStaff() {
+    	try {
+	    	staffPage.createNewStaff("CHAMSTAFFN", "EDITEDNAME");
+	    	Assert.assertTrue(staffPage.isDeleteStaffSuccessful("CHAMSTAFFN", "EDITEDNAME"), 
+	    			"The deleted Staff has found during search");
+    	} catch(Exception e) {
+			System.out.println("'Exception in test testDeleteActionOnNewBranch");
+			e.printStackTrace();
+			Assert.fail("Test failed due to some exception");
+		}
+    }
+ 
+    /**
+     * Tear down method for cleanup after each test.
+     */
+    @AfterMethod
+    public void tearDown() {
+    	super.tearDown();
+    	System.out.println("Dispose the WebDriver after each test run");
+    	driver.quit();
+    }
+}

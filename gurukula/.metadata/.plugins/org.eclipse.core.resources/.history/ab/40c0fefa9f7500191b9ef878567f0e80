@@ -1,0 +1,36 @@
+package com.gurukula.testgurukula.pages;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class BasePage {
+
+	private static final int TIMEOUT_IN_SECONDS = 20;
+    private static final int POLLING_INTERVAL_IN_MILLISECONDS = 100;
+
+    protected WebDriver driver;
+    private WebDriverWait wait;
+
+    public BasePage(WebDriver driver) {
+        this.driver = driver;
+        wait = new WebDriverWait(this.driver, TIMEOUT_IN_SECONDS, POLLING_INTERVAL_IN_MILLISECONDS);
+    }
+
+    protected void waitForElementToAppear(WebElement element) {
+        wait.until(ExpectedConditions.visibilityOf(element));
+    }
+
+    protected void waitForElementToDisappear(WebElement element) {
+        wait.until(ExpectedConditions.invisibilityOf(element));
+    }
+}

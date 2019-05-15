@@ -1,0 +1,162 @@
+package com.gurukula.testgurukula.util;
+
+import java.util.HashMap;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class WebDriverWrapperUtil {
+
+	public static String getPageTitle(WebDriver driver) {
+		if (driver == null) {
+			return null;
+		}
+		return driver.getTitle();
+	}
+	
+	public static boolean elementExistsByID(WebDriver driver, String id) {
+		
+		try {
+			
+			driver.findElement(By.id(id));
+			return true;
+		} catch(NoSuchElementException nse) {
+			System.out.println("Element with id " + id + " not found");
+		}
+		return  false;
+	}
+	
+	public static boolean elementExistsByIDTimeout(WebDriver driver, String id, int timeoutInSeconds) {
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(id)));
+			return true;
+		} catch(NoSuchElementException nse) {
+			System.out.println("Element with id " + id + " not found");
+		}
+		return  false;
+	}
+	
+	public static WebElement getElementByID(WebDriver driver, String id) {
+		
+		try {
+			
+			WebElement element = driver.findElement(By.id(id));
+			return element;
+		} catch(NoSuchElementException nse) {
+			System.out.println("Element with id " + id + " not found");
+		}
+		return  null;
+	}
+	
+	public static WebElement getElementByIDTimeout(WebDriver driver, String id, int timeoutInSeconds) {
+		try {
+			WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+			WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(id)));
+			return element;
+		} catch(NoSuchElementException nse) {
+			System.out.println("Element with id " + id + " not found");
+		}
+		return  null;
+	}
+	
+	public static WebElement getWebTableCellElement(WebDriver driver, WebElement table, String cell) {
+		try {
+			List<WebElement> rows = table.findElements(By.tagName("tr"));
+			System.out.println("Found " + rows.size() + " rows in the table");
+			for (int i=0; i<rows.size(); i++) {
+				List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+				System.out.println("Found " + columns.size() + " columns in the table");
+				for (int j=0; j<columns.size(); j++) {
+					String cellText = columns.get(j).getText();
+					if(cellText.equalsIgnoreCase(cell)) {
+						System.out.println("Found cell with value "+ cell);
+						return columns.get(j);
+					}
+				}
+			}
+		} catch(NoSuchElementException nse) {
+			System.out.println("Column with text " + cell + " not found");
+		}
+		return  null;
+	}
+	
+	public static WebElement scrollHyperlinkWithLinkTextIntoView(WebDriver driver, String linkText) {
+		try {
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				WebElement hyperlink = driver.findElement(By.linkText(linkText));
+		        js.executeScript("arguments[0].scrollIntoView();", hyperlink);
+		        return hyperlink;
+			} catch(NoSuchElementException nse) {
+			System.out.println("Element with linkText " + linkText + " not found");
+		}
+		return null;
+	}
+	
+	public static WebElement scrollElementWitIDIntoView(WebDriver driver, String id) {
+		try {
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				WebElement element = driver.findElement(By.id(id));
+		        js.executeScript("arguments[0].scrollIntoView();", element);
+		        return element;
+			} catch(NoSuchElementException nse) {
+			System.out.println("Element with id " + id + " is not found");
+		}
+		return null;
+	}
+	
+	public static void mouseHover(WebDriver driver, WebElement element) {
+		try {
+				Actions actions = new Actions(driver);
+				actions.moveToElement(element);
+				actions.perform();
+			} catch(NoSuchElementException nse) {
+			System.out.println("Cannot mouse hover to element");
+			}
+		}
+	
+	public static void rightClick(WebDriver driver, WebElement element) {
+		try {
+				Actions actions = new Actions(driver);
+				actions.contextClick(element);
+				actions.perform();
+			} catch(NoSuchElementException nse) {
+			System.out.println("Cannot right click on element");
+			}
+		}
+	
+	public static void doubleClick(WebDriver driver, WebElement element) {
+		try {
+				Actions actions = new Actions(driver);
+				actions.doubleClick(element);
+				actions.perform();
+			} catch(NoSuchElementException nse) {
+			System.out.println("Cannot double click on element");
+			}
+		}
+	public static WebElement getBranchStaffTableActionElement
+			(WebDriver driver, WebElement webTable, HashMap<String, String> map) {
+		try {
+			
+			List<WebElement> rows = webTable.findElements(By.tagName("tr"));
+			System.out.println("Found " + rows.size() + " rows in the table");
+			for (int i=0; i<rows.size(); i++) {
+				List<WebElement> columns = rows.get(i).findElements(By.tagName("td"));
+				System.out.println("Found " + columns.size() + " columns in the table");
+				if(columns.get(1).getText()==map.get("Name") && columns.get(2).getText()==map.get("Code")) {
+					return columns.get(3).findElement(By.xpath("//span[text()='" + map.get("Action") + "']"));
+				}
+			}
+		} catch(NoSuchElementException nse) {
+			System.out.println("Column with text " + map.get("Name") + " not found");
+		}
+		return  null;
+	}
+}

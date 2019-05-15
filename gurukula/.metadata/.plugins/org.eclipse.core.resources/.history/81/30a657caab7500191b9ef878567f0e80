@@ -1,0 +1,66 @@
+package com.gurukula.testgurukula.tests;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.gurukula.testgurukula.implementations.TestBaseImpl;
+import com.gurukula.testgurukula.pages.ForgotPasswordPage;
+import com.gurukula.testgurukula.pages.LoginPage;
+import com.gurukula.testgurukula.testData.DataProviders;
+
+/**
+ * Test class to test all the scenarios on Forgot password page.
+ * @author Chandra.Sekhar.Muttineni
+ *
+ */
+
+public class TestForgotPasswordPage extends TestBaseImpl {
+
+	
+	ForgotPasswordPage forgotPasswordPage;
+	WebDriver driver;
+	
+    @BeforeMethod
+    public void setUp() {
+    	super.setUp();
+    	driver = new FirefoxDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.get(forgotPasswordUri);
+    }
+    
+    @Test(dataProvider="ValidEMailDataProvider", dataProviderClass = DataProviders.class)
+    public void testValidForgotPassword(String email) {
+    	forgotPasswordPage = new ForgotPasswordPage(driver);
+    	forgotPasswordPage.resetPassword(email);
+    	Assert.assertTrue(forgotPasswordPage.isResetSuccessful());
+    }
+    
+    @Test(dataProvider="InvalidEMailDataProvider", dataProviderClass = DataProviders.class)
+    public void testGurukulaFailedLogin(String email) {
+    	forgotPasswordPage = new ForgotPasswordPage(driver);
+    	forgotPasswordPage.resetPassword(email);
+    	Assert.assertTrue(forgotPasswordPage.hasResetFailed());
+    }
+    
+    @AfterMethod
+    public void tearDown() {
+    	super.tearDown();
+    	System.out.println("Dispose the WebDriver after each test run");
+    	driver.quit();
+    	
+    }
+}

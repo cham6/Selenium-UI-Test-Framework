@@ -1,0 +1,74 @@
+package com.gurukula.testgurukula.util;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
+
+import com.gurukula.testgurukula.pages.LoggedInPage;
+import com.gurukula.testgurukula.pages.LoginPage;
+import com.gurukula.testgurukula.testData.TestConstants;
+
+public class TestUtil {
+
+	private static enum Contexts {
+		Branch, Staff, Settings, Sessions, Logout, Password
+	}
+	
+	static String defaultUsername = TestConstants.VALID_PASSWORD;
+	static String defaultPassword = TestConstants.VALID_USERNAME;
+	static String loginUri = TestConstants.LOGIN_URL;
+	public static boolean loginAndNavigateToContext(WebDriver driver, String context)
+    {	LoginPage loginPage;
+    	driver.get(loginUri);
+    	loginPage = new LoginPage(driver);
+    	loginPage.loginToGurukula(defaultUsername, defaultPassword);
+    	if(!loginPage.isLoginSuccessful()) {
+    		System.out.println("Failed to login to Gurukula Web app using default credentials ");
+    		return false;
+    	}
+    	LoggedInPage loggedInPage;
+    	loggedInPage = new LoggedInPage(driver);
+    	Assert.assertTrue(loggedInPage.isLoggedIn());
+    	Contexts testContext = Contexts.valueOf(context);
+    	switch(testContext) 
+        { 
+            case Branch: 
+            	loggedInPage.clickEntities();
+            	loggedInPage.clickBranch(); 
+                break; 
+            case Staff: 
+            	loggedInPage.clickEntities();
+            	loggedInPage.clickStaff();
+                break; 
+            case Settings: 
+                loggedInPage.clickAccount();
+                loggedInPage.clickSettings();
+                break; 
+            case Sessions: 
+                loggedInPage.clickAccount();
+                loggedInPage.clickSessions();
+                break; 
+            case Logout: 
+                loggedInPage.clickAccount();
+                loggedInPage.clickLogout();
+                break; 
+            case Password: 
+                loggedInPage.clickAccount();
+                loggedInPage.clickPassword();
+                break; 
+            default: 
+                System.out.println("Please provide a valid context to navigate");
+                return false;
+        } 
+    	return true;
+
+    }
+	
+}

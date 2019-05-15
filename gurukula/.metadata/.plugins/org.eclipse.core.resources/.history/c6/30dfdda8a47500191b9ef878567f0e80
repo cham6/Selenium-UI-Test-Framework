@@ -1,0 +1,134 @@
+package com.gurukula.testgurukula.pages;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+/**
+ * Class to represent the Registration page. 
+ * Contains all the objects' locators and corresponding functionalities on the objects of Registration page.
+ * @author Chandra.Sekhar.Muttineni
+ *
+ */
+
+public class RegistrationPage extends BasePage {
+	
+	//Page Factory locators and their corresponding web elements.
+	
+	@FindBy(xpath="//h1[text()='Registration']")
+	WebElement registrationLabel;
+	
+	@FindBy(xpath="//input[@name='login']")
+	WebElement loginTextBox;
+	
+	@FindBy(xpath="//input[@name='email']")
+	WebElement emailTextBox;
+	
+	@FindBy(xpath="//input[@name='password']")
+	WebElement passwordTextBox;
+	
+	@FindBy(xpath="//input[@name='confirmPassword']")
+	WebElement confirmPasswordloginTextBox;
+	
+	@FindBy(xpath="//button[text()='Register']")
+	WebElement registerButton;
+	
+	@FindBy(xpath="//div[contains(text(),'Please try again later.')]")
+	WebElement registrationFailed;
+	
+	@FindBy(xpath="//div[contains(text(),'Registeration is successful')]")
+	WebElement registrationSuccessful;
+
+	//Constructor that initializes the Driver object in parent and use it for current page
+	public RegistrationPage(WebDriver wd) {
+		super(wd);
+		PageFactory.initElements(driver, this);
+	}
+	
+	//Actions on initialized WebElements.
+	private void setLogin(String username) {
+		if(username == null) {
+			return;
+		}
+		loginTextBox.sendKeys(username);
+	}
+	
+	private void setEmail(String email) {
+		if(email == null) {
+			return;
+		}
+		emailTextBox.sendKeys(email);
+	}
+	
+	private void setPassword(String password) {
+		if(password == null) {
+			return;
+		}
+		passwordTextBox.sendKeys(password);
+	}
+	
+	private void setConfirmPassword(String confirmPassword) {
+		if(confirmPassword == null) {
+			return;
+		}
+		confirmPasswordloginTextBox.sendKeys(confirmPassword);
+	}
+	
+	public void clickRegister() {
+		registerButton.click();
+	}
+	
+	public boolean isRegisterButtonEnabled() {
+		return registerButton.isEnabled();
+	}
+	
+	public boolean isRegistrationPage() {
+		return registrationLabel.isDisplayed();
+	}
+	
+	public boolean isRegistrationSuccessful() {
+		
+		try {
+			return registrationSuccessful.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("'Registration has failed.");
+			nse.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean hasLoginFailed() {
+		
+		try {
+			return registrationFailed.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("'Registration has been successful.");
+			return false;
+		}
+	}
+	
+	/**
+	 * This method will be exposed to Tests
+	 * @param userName
+	 * @param password
+	 * @throws InterruptedException 
+	 */
+	public void newUserRegistrationDataEntry(String loginName, String email, 
+			String password, String confirmPassword){
+		
+		setLogin(loginName);
+		setEmail(email);
+		setPassword(password);
+		setConfirmPassword(confirmPassword);
+	}
+}

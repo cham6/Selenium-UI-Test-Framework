@@ -1,0 +1,76 @@
+package com.gurukula.testgurukula.tests;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import java.util.concurrent.TimeUnit;
+
+/**
+ * Test class to test all the scenarios on Change Password page.
+ * @author Chandra.Sekhar.Muttineni
+ *
+ */
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.gurukula.testgurukula.implementations.TestBaseImpl;
+import com.gurukula.testgurukula.pages.LoggedInPage;
+import com.gurukula.testgurukula.pages.LoginPage;
+import com.gurukula.testgurukula.pages.PasswordPage;
+import com.gurukula.testgurukula.pages.SettingsPage;
+import com.gurukula.testgurukula.util.TestUtil;
+
+public class TestPasswordPage extends TestBaseImpl{
+	
+	private PasswordPage passwordPage;
+	private LoginPage loginPage;
+	private LoggedInPage loggedInPage;
+	String context = "Password";
+	
+    @BeforeMethod
+    public void setUp() {
+    	super.setUp();
+        TestUtil.loginAndNavigateToContext(driver, context);
+        passwordPage = new PasswordPage(driver);
+    }
+    
+    /**
+     * Test change password feature for valid passwords.
+     */
+    @Test
+    public void testPasswordSavedSuccessfully() {
+
+    	passwordPage.savePassword("admin", "admin");
+    	Assert.assertTrue(passwordPage.hasPasswordSavedSuccessfully(), 
+    			"Failed to save passwords");
+    }
+    
+    /**
+     * Test Change password functionality for invalid input data.
+     */
+    @Test
+    public void testPasswordSaveFails() {
+    	
+    	passwordPage.savePassword("admin111", "admin1111");
+    	Assert.assertTrue(passwordPage.hasSavePasswordFailed(), 
+    			"Password saved successfully");
+    }
+
+    /**
+     * Tear down method for cleanup after each test.
+     */
+    @AfterMethod
+    public void tearDown() {
+    	super.tearDown();
+    }
+}

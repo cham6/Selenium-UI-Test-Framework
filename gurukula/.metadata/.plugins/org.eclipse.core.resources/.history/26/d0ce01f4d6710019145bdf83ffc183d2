@@ -1,0 +1,79 @@
+package com.gurukula.testgurukula.pages;
+
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class ForgotPasswordPage {
+
+	WebDriver driver;
+	
+	@FindBy(xpath="//h1[text()='Reset your password']")
+	WebElement resetPasswordLabel;
+	
+	@FindBy(xpath="//input[@type='email' and name='email']")
+	WebElement emailTextBox;
+	
+	@FindBy(xpath="//button[text()='Reset password']")
+	WebElement resetButton;
+	
+	@FindBy(xpath="//div[contains(text(),'Please check and try again')]")
+	WebElement resetFailed;
+
+	@FindBy(xpath="//div[contains(text(),'An email has been sent to your registered email address')]")
+	WebElement resetSuccessful;
+
+	
+	public ForgotPasswordPage(WebDriver wd) {
+		driver = wd;
+		PageFactory.initElements(driver, this);
+	}
+	
+	private void setEmailText(String email) {
+		if(email == null) {
+			return;
+		}
+		emailTextBox.sendKeys(email);
+	}
+	
+	
+	
+	private void clickReset() {
+		resetButton.click();
+	}
+	
+	public boolean isResetSuccessful() {
+		
+		try {
+			return resetSuccessful.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("'Password reset has failed.");
+			nse.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean hasLoginFailed() {
+		
+		try {
+			return resetFailed.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("'Password reset is successful.");
+			return false;
+		}
+	}
+	
+	/**
+	 * This method will be exposed to Tests
+	 * @param email
+	 */
+	public void resetPassword(String email){
+		
+		setEmailText(email);
+		clickReset();
+	}
+
+	
+}

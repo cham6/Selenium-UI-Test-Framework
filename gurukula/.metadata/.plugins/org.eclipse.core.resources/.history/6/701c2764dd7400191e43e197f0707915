@@ -1,0 +1,37 @@
+package com.gurukula.testgurukula.tests;
+
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.gurukula.testgurukula.implementations.TestBaseImpl;
+import com.gurukula.testgurukula.pages.LoggedInPage;
+import com.gurukula.testgurukula.pages.LoginPage;
+import com.gurukula.testgurukula.util.TestUtil;
+
+public class TestLogout extends TestBaseImpl {
+
+	private LoggedInPage loggedInPage;
+	WebDriver driver;
+	String context = "Logout";
+	
+    @BeforeMethod
+    public void setUp() {
+    	super.setUp();
+    	driver = new FirefoxDriver();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        
+    }
+
+    @Test
+    public void loginAndNavigateToPasswordPage() {
+    	TestUtil.loginAndNavigateToContext(driver, context);
+    	loggedInPage = new LoggedInPage(driver);
+    	Assert.assertFalse(loggedInPage.isLoggedIn(), "Logout is not successful");
+	}
+	
+}

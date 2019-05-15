@@ -1,0 +1,138 @@
+package com.gurukula.testgurukula.pages;
+
+/**
+ * Copyright (c) 2019, ChamLabs.
+ * Responsible: Chandra.Sekhar.Muttineni
+ * @author https://github.com/cham6
+ * @email: paperplanes.chandra@gmail.com
+ * @fork: https://github.com/cham6/TestAutomationFrameworkForGurukula
+ */
+
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+import com.gurukula.testgurukula.util.WebDriverWrapperUtil;
+
+/**
+ * Class to represent the Settings page. 
+ * Contains all the objects' locators and corresponding functionalities on the objects of Settings page.
+ * @author Chandra.Sekhar.Muttineni
+ *
+ */
+
+public class SettingsPage extends BasePage {
+	
+	//Page Factory locators and their corresponding web elements.
+	
+	@FindBy(xpath="//div[contains(text(),'User settings for')]")
+	WebElement settingsLabel;
+	
+	@FindBy(xpath="//input[@name='firstName']")
+	WebElement firstName;
+	
+	@FindBy(xpath="//input[@name='lastName']")
+	WebElement lastName;
+	
+	@FindBy(xpath="//input[@name='email']")
+	WebElement email;
+	
+	@FindBy(xpath="//select[@name='langKey']")
+	WebElement selectLanguage;
+
+	@FindBy(xpath="//button[text()='Save']")
+	WebElement saveButton;
+	
+	@FindBy(xpath="//strong[contains(text(),'Settings saved')]")
+	WebElement settingsSavedSuccessfully;
+	
+	@FindBy(xpath="//div[contains(text(),'Settings could not be saved.')]")
+	WebElement settingsSaveFailed;
+
+	//Constructor that initializes the Driver object in parent and use it for current page
+	public SettingsPage(WebDriver wd) {
+		super(wd);
+		PageFactory.initElements(driver, this);
+	}
+	
+	//Actions on initialized WebElements.
+	private void setFirstName(String firstname) {
+		if(firstName == null) {
+			return;
+		}
+		firstName.clear();
+		firstName.sendKeys(firstname);
+	}
+	
+	private void setLastName(String lastname) {
+		if(lastname == null) {
+			return;
+		}
+		lastName.clear();
+		lastName.sendKeys(lastname);
+	}
+	
+	private void setEmail(String emailInput) {
+		if(emailInput == null) {
+			return;
+		}
+		email.clear();
+		email.sendKeys(emailInput);
+	}
+	
+	private void setLanguage(String language) {
+		if(language == null) {
+			return;
+		}
+		WebDriverWrapperUtil.selectItemFromDropdown(selectLanguage,language);
+	}
+
+	private void clickSave() {
+		if(saveButton.isEnabled()) {
+			saveButton.click();
+		}
+	}
+	
+	public boolean isSaveEnabled() {
+		return saveButton.isEnabled();
+		}
+	
+	public boolean hasSettingsSavedSuccessfully() {
+		
+		try {
+			return settingsSavedSuccessfully.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("Failed to save the settings.");
+			nse.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean hasSaveSettingsFailed() {
+		
+		try {
+			return settingsSaveFailed.isDisplayed();
+		} catch(NoSuchElementException nse) {
+			System.out.println("Settings have been saved successfully.");
+			return false;
+		}
+	}
+	
+	/**
+	 * Method to Enter and save settings in Settings page.
+	 * @param firstName
+	 * @param lastName
+	 * @param email
+	 * @param language
+	 */
+	public void saveSettings(String firstName, String lastName, String email, String language){
+		setFirstName(firstName);
+		setLastName(lastName);
+		setEmail(email);
+		setLanguage(language);
+		clickSave();
+	}
+
+}
