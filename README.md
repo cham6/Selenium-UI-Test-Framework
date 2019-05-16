@@ -1,7 +1,7 @@
 # gurukulaAssignment
 
 
-#The following artefacts are produced out of this assignment:
+#The following Test artefacts are produced out of this assignment effort:
 <b>
 1) Test case document for all the identified scenarios with respect to the functional requirements. 'TestArtefacts'
 2) Test Plan and Strategy documents. 'TestArtefacts'
