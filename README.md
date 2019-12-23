@@ -1,4 +1,4 @@
-# gurukulaAssignment
+# Selenium-UI-Test-Framework
 
 
 #The following Test artefacts are produced out of this assignment effort:
